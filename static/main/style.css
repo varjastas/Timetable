@@ -1,0 +1,10 @@
+nav.navbar .dropdown:hover > .dropdown-menu {
+    display: block; 
+   } 
+body{
+    background: url("25.jpg") left / auto 100% no-repeat, url("25.jpg") right / auto 100% no-repeat;
+    background-size: 200%; /* Современные браузеры */
+}
+.root {
+    font-size: larger;
+}

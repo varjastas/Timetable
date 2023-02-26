@@ -1,0 +1,105 @@
+{% extends "layout/basic.html" %}
+{% load static %}
+{% block content %}
+<table>
+    <td>
+        <form method = "POST" id = 'Teacher_form' action="{% url 'index' %}" >
+            {% csrf_token %}
+            <select name = 'by_teacher' onchange="document.getElementById('Teacher_form').submit()">
+            <option  disabled selected > Выберите преподавателя </option>
+            {% for i in form.select_teacher %}
+            {{i}}
+            {%endfor%}
+            </select>
+
+        </form>
+    </td>
+    <td>
+        <form method = "POST" id = 'Class_form' action="{% url 'index' %}" >
+            {% csrf_token %}
+            <select name = 'by_class' onchange="document.getElementById('Class_form').submit()">
+            <option  disabled selected > Выберите класс </option>
+            {% for i in form.select_class %}
+            {{i}}
+            {%endfor%}
+            </select>
+
+        </form>
+    </td>
+</table>
+
+{%if lessons%}
+<!-- Таблица для вывода -->
+    <table>
+        <!-- Вывод дней недели -->
+        <tr>
+            <th> </th>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>6</th>
+            <th>7</th>
+        </tr>
+    {% for days, lesson_day in lessons.items%}
+        
+        <tr>
+            <th>{{days}}</th>
+            {%for lesson in lesson_day%}
+            <td>
+                {%if lesson != 1 %}
+                <div class="nav-item dropdown">
+                
+                <div class="nav-link dropdown-toggle"  id="navbarDropdownMenuDiv" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{lesson.lesson_name}}</div>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuDiv">
+                    {% if class_or_teacher %}
+                        <a class="dropdown-item" href="{% url 'by_teacher' lesson.teacher %}"> Учитель: {{lesson.teacher}}</a>
+                    {% else %}
+
+                        <a class="dropdown-item" href="{% url 'by_class' lesson.classroom %}"> Класс: {{lesson.classroom}}</a>
+                    {% endif %}
+
+                </div>
+                    {%else%}
+                    <div></div>
+                
+                </div>
+                {%endif%}
+            </td>
+            {%endfor%}
+        </tr>
+    
+        
+  
+    {% endfor %}   
+    </table>
+    <style>
+        .dropdown:hover > .dropdown-menu {
+        display: block; 
+        } 
+        table {
+        background: url("{% static 'main/table.jpg' %}") left / auto 100%;
+        border: 6px double #333; /* Рамка вокруг таблицы */ 
+        border-collapse: separate; /* Способ отображения границы */ 
+        width: 100%; /* Ширина таблицы */ 
+        border-spacing: 7px 11px; /* Расстояние между ячейками */ 
+        }
+        td {
+        padding: 5px; /* Поля вокруг текста */ 
+        border: 2px solid #c9c2c2; /* Граница вокруг ячеек */ 
+        text-align: center;
+        height: 10px;
+        width: 20px;
+        vertical-align: center;
+        }
+        th {
+        padding: 5px; /* Поля вокруг текста */ 
+        border: 3px solid #000000; /* Граница вокруг ячеек */ 
+        text-align: center;
+        height: 10px;
+        width: 20px;
+        }
+    </style>
+{%endif%}
+{% endblock %}
